@@ -1,0 +1,33 @@
+.btn {
+    width: 70px;
+    height: 30px;
+    color: white;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-right: 4px;
+}
+#btnSum {
+    background-color: yellowgreen;
+}
+#btnDivide {
+    background-color: green;
+}
+#btnMultiply {
+    background-color: blueviolet;
+    width: 100px;
+}
+.textInput {
+    width: 300px;
+    height: 20px;
+    display: block;
+    margin: 0 auto 10px;
+}
+.lbl {
+    border: 1px solid black;
+    width: 316px;
+    height: 20px;
+    display: block;
+    margin: 0 auto 10px;
+}
