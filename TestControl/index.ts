@@ -16,8 +16,8 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
     private buttonSum: HTMLButtonElement;
     private buttonDivide: HTMLButtonElement;
     private buttonMultiply: HTMLButtonElement;
-    private _result: number;
-    private _notifyOutputChanged: void;
+    private _result: string;
+    private _notifyOutputChanged: () => void;
     private _errorMessage: HTMLLabelElement;
 
     /**
@@ -27,55 +27,34 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
 
     }
 
-    public fixDecimalPoints(math: number) {
-
-        return Number.parseFloat(math.toString()).toFixed(2)
-
-    }
-
     public funcMath(type: string){
         switch (type) {
             case "Sum":
-                const sum = parseFloat(this.value1.value) + parseFloat(this.value2.value);
-                //alert(Number.parseFloat(sum.toString()).toFixed(2));
-                this.answerArea.innerHTML = sum.toString();
-                this._notifyOutputChanged;
+                var sum = parseFloat(this.value1.value) + parseFloat(this.value2.value);
+                this._result = sum.toString();
+                this._notifyOutputChanged();
                 break;
             case "Divide":
                 if (parseInt(this.value2.value)==0) {
-                    alert("Can't divide by zero");   
+                    this._result = "Can't Divide by zero";
+                    this.value1.value = "";
+                    this.value2.value = "";
+                    this._notifyOutputChanged();
+                    //alert("Can't divide by zero");   
                 }
                 else{
-                    const divide = parseFloat(this.value1.value) / parseFloat(this.value2.value);
-                    this.answerArea.innerHTML = divide.toString();
+                    var divide = parseFloat(this.value1.value) / parseFloat(this.value2.value);
+                    this._result = divide.toString();
+                    this._notifyOutputChanged();
                 }
                 break;
             case "Multiply":
-                const mul = parseFloat(this.value1.value) * parseFloat(this.value2.value);
-                this.answerArea.innerHTML = mul.toString();
+                var mul = parseFloat(this.value1.value) * parseFloat(this.value2.value);
+                this._result = mul.toString();
+                this._notifyOutputChanged();
                 break;    
             default:
                 break;
-        }
-
-    }
-
-    public buttonSumFunc() {
-                
-        const sum = parseInt(this.value1.value) + parseInt(this.value2.value);
-        this.answerArea.innerHTML = sum.toString();
-        //alert(this.answerArea.textContent);
-
-    }
-
-    public buttonDivideFunc() {
-
-        if (parseInt(this.value2.value)==0) {
-            alert("Can't divide by zero");   
-        }
-        else{
-            const divide = parseInt(this.value1.value) / parseInt(this.value2.value);
-            this.answerArea.innerHTML = divide.toString();
         }
 
     }
@@ -90,11 +69,7 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
      */
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement): void {
         // Add control initialization code
-        // this._container = container;
-        // this._context = context;
-        // this.notifyOutputChanged = notifyOutputChanged;
-        // this.isEditMode = false;
-        this._notifyOutputChanged = notifyOutputChanged();
+        this._notifyOutputChanged = notifyOutputChanged;
 
         //value 1 text input
         this.value1 = document.createElement("input");
@@ -153,13 +128,6 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
         //adding event listener to sum button
         this.buttonMultiply.addEventListener("click", () => { this.funcMath("Multiply"); });
 
-        //Initializing label element
-        this.answerArea = document.createElement("label");
-        this.answerArea.setAttribute("class", "lbl");
-        this.answerArea.setAttribute("id", "lblAnswerArea");
-
-        container.appendChild(this.answerArea);
-
     }
 
 
@@ -170,8 +138,7 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
         // Checks for updates coming in from outside
-        this._result = context.parameters.calResult.raw!;
-
+        
     }
 
     /**
@@ -179,7 +146,9 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
      */
     public getOutputs(): IOutputs {
-        return {calResult: 12};
+        return {
+            calResult: this._result
+        };
     }
 
     /**
