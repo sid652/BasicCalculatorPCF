@@ -16,7 +16,7 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
     private buttonSum: HTMLButtonElement;
     private buttonDivide: HTMLButtonElement;
     private buttonMultiply: HTMLButtonElement;
-    private _calResult: string;
+    private _result: number;
     private _notifyOutputChanged: void;
     private _errorMessage: HTMLLabelElement;
 
@@ -39,6 +39,7 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
                 const sum = parseFloat(this.value1.value) + parseFloat(this.value2.value);
                 //alert(Number.parseFloat(sum.toString()).toFixed(2));
                 this.answerArea.innerHTML = sum.toString();
+                this._notifyOutputChanged;
                 break;
             case "Divide":
                 if (parseInt(this.value2.value)==0) {
@@ -169,11 +170,8 @@ export class TestControl implements ComponentFramework.StandardControl<IInputs, 
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
         // Checks for updates coming in from outside
+        this._result = context.parameters.calResult.raw!;
 
-        //Updating the values
-        // this._calResult = context.parameters.calResult.raw || "";
-        // this.answerArea.textContent = this._calResult;
-        //this.value1.title + this.value2.value = this._value1;
     }
 
     /**

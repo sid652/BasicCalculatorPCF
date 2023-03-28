@@ -2,7 +2,7 @@
 <manifest>
   <control namespace="TestComponent" constructor="TestControl" version="0.0.1" display-name-key="TestControl" description-key="TestControl description" control-type="standard">
     <external-service-usage enabled="false"></external-service-usage>
-    <property name="calResult" display-name-key="calResult-name-key" description-key="calResult-desc-key" of-type="Decimal" usage="output" required="true" />
+    <property name="calResult" display-name-key="calResult-name-key" description-key="calResult-desc-key" of-type="Decimal" usage="bound" required="true" />
     <resources>
       <code path="index.ts" order="1"/>
       <css path="./css/input.css" order="1"/>
